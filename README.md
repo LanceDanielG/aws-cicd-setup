@@ -10,6 +10,7 @@
 > [!NOTE]
 > This setup is based on **Angular** (UI) and **Laravel** (API), but can be adapted for other frameworks.
 
+*   **Region:** **`ap-southeast-1` (Singapore)** for all resources (unless otherwise noted).
 *   **UI (Frontend):** Angular application hosted on **Amazon S3** and distributed via **Amazon CloudFront**.
 *   **API (Backend):** PHP/Laravel application on **Amazon EC2** (Ubuntu/Nginx).
 *   **Deployment Method:** 
@@ -59,18 +60,26 @@ Follow this order: **Route 53 → ACM → S3 → CloudFront → Route 53 (A Reco
 
 ### :four: Step 4: Create CloudFront Distribution (UI)
 1.  Go to **CloudFront > Create distribution**.
-2.  **Origin Domain**: Select your S3 bucket.
-3.  **Origin Access**: Select **Origin access control settings (OAC)** > Create new OAC.
-4.  **Update S3 Bucket Policy**: After creation, copy the policy AWS provides and paste it into S3 > Bucket > Permissions > Bucket policy.
-5.  **Viewer Protocol Policy**: Select **Redirect HTTP to HTTPS**.
-6.  **Cache Policy**: Use `CachingOptimized`.
-7.  **Default Root Object**: Set to `index.html`.
-8.  **Custom SSL Certificate**: Select the ACM certificate you created in Step 2.
-9.  **Alternate Domain Names (CNAMEs)**: Add `uat.yourdomain.com`.
-10. **Custom Error Responses (for SPAs)**:
-    - `403` → `/index.html` → `200`
-    - `404` → `/index.html` → `200`
-11. Click **Create distribution**.
+2.  **Origin**:
+    *   **Origin domain**: Select your S3 bucket.
+    *   **Origin access**: Select **Origin access control settings (OAC)** (Recommended) > Create new OAC > Click **Create**.
+3.  **Default cache behavior**:
+    *   **Viewer protocol policy**: Select **Redirect HTTP to HTTPS**.
+    *   **Allowed HTTP methods**: `GET, HEAD` (standard for SPA).
+    *   **Cache policy**: Use `CachingOptimized`.
+4.  **Web Application Firewall (WAF)**:
+    *   Select **Do not enable security protections** (to avoid additional WAF costs unless required).
+5.  **Settings**:
+    *   **Price class**: Select **Use only North America, Europe, Asia, Middle East, and Africa** (includes Singapore).
+    *   **Alternate domain names (CNAMEs)**: Add `uat.yourdomain.com`.
+    *   **Custom SSL certificate**: Select the ACM certificate you created in Step 2.
+    *   **Default root object**: Set to `index.html`.
+6.  Click **Create distribution**.
+7.  **Update S3 Bucket Policy**: After creation, a banner will appear. Click **"Copy policy"** and go to S3 > Bucket > Permissions > Bucket policy > **Edit** > Paste and **Save**.
+8.  **Wait for Deployment**: The status will show "Deploying". Wait until it shows the date.
+9.  **Custom Error Responses (for SPAs)**: Go to **Error pages** tab:
+    *   Create error response: `403` → `/index.html` → `200`
+    *   Create error response: `404` → `/index.html` → `200`
 
 ---
 
