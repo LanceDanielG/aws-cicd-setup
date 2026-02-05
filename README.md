@@ -238,23 +238,8 @@ curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 ```
 
-### :three: Install Certbot & Get SSL
-```bash
-sudo apt install certbot python3-certbot-nginx -y
-sudo certbot --nginx -d uat-api.yourdomain.com
-```
-
-### :four: Initial App Setup
-```bash
-sudo mkdir -p /var/www/html/your-api
-sudo chown -R www-data:www-data /var/www/html/your-api
-sudo -u www-data git clone https://bitbucket.org/user/repo.git /var/www/html/your-api
-```
-
----
-
-## ⚙️ 4. Nginx Configuration Template
-Create at `/etc/nginx/sites-available/app.conf`:
+### :three: Nginx Configuration Template
+Create configuration at `/etc/nginx/sites-available/app.conf`:
 
 ```nginx
 server {
@@ -301,6 +286,19 @@ Enable the site:
 sudo ln -s /etc/nginx/sites-available/app.conf /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
+```
+
+### :four: Install Certbot & Get SSL
+```bash
+sudo apt install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d uat-api.yourdomain.com
+```
+
+### :five: Initial App Setup
+```bash
+sudo mkdir -p /var/www/html/your-api
+sudo chown -R www-data:www-data /var/www/html/your-api
+sudo -u www-data git clone https://bitbucket.org/user/repo.git /var/www/html/your-api
 ```
 
 ---
