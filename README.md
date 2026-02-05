@@ -177,6 +177,26 @@ Follow this order: **Route 53 → ACM → S3 → CloudFront → Route 53 (A Reco
 1.  Go to **RDS > Databases > Select your DB**.
 2.  Copy the **Endpoint** (e.g., `my-app-uat-db.abc123.ap-southeast-1.rds.amazonaws.com`).
 
+#### Access & Manage Database via EC2
+1.  **SSH into your EC2 instance**.
+2.  **Install MySQL Client**:
+    ```bash
+    sudo apt update
+    sudo apt install mysql-client -y
+    ```
+3.  **Connect to RDS**:
+    ```bash
+    mysql -h your-rds-endpoint -P 3306 -u admin -p
+    ```
+    *(Replace `your-rds-endpoint` with the endpoint from Step 7. Use `-P 3306` for MySQL or `-P 5432` for PostgreSQL. You will be prompted for your master password.)*
+4.  **Create Database**:
+    Once connected, run:
+    ```sql
+    SHOW DATABASES;
+    CREATE DATABASE your_database_name;
+    EXIT;
+    ```
+
 ---
 
 ### :seven: Step 7: Configure Laravel .env File
